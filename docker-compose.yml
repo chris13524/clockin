@@ -1,0 +1,47 @@
+version: "3"
+services:
+  
+  client:
+    build:
+      context: client
+    image: chris13524/clockin/client
+    restart: always
+    environment:
+      API: "https://api.$DOMAIN"
+    
+  server:
+    build:
+      context: server
+    image: chris13524/clockin/server
+    restart: always
+    environment:
+      CLIENT: "https://$DOMAIN"
+      MAILGUN_KEY: $MAILGUN_KEY
+      MAILGUN_DOMAIN: $MAILGUN_DOMAIN
+    
+  exposer:
+    image: valian/docker-nginx-auto-ssl
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - $DATA_DIR/exposer:/etc/resty-auto-ssl
+    environment:
+      ALLOWED_DOMAINS: "$DOMAIN"
+      SITES: "$DOMAIN=client:80;api.$DOMAIN=server:80"
+      
+  appupdater:
+    build:
+      context: appupdater
+    image: chris13524/docker-hook:latest
+    restart: always
+    ports:
+      - 8555:8555
+    environment:
+      CMD: sh /work/update.sh
+      TOKEN: $UPDATE_TOKEN
+    working_dir: /work
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - .:/work

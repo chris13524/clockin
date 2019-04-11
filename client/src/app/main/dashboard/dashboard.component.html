@@ -1,0 +1,128 @@
+<div class="userRow">
+  {{email}}
+  <button class="btn btn-link" (click)="logout()">logout</button>
+</div>
+
+<div class="projectRow">
+  <ng-container *ngIf="projects.length > 0">
+    <select class="custom-select" [(ngModel)]="selectedProject" *ngIf="projects.length > 0">
+      <option *ngFor="let project of projects; index as i" [value]="i">
+        {{project.name}}
+      </option>
+    </select>
+
+    <div class="dropleft">
+      <button class="btn btn-overflow" type="button" id="projectDropdown" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <div class="dropdown-menu" aria-labelledby="projectDropdown">
+        <button class="dropdown-item" data-toggle="modal" data-target="#editProjectModal"
+                (click)="updatedProjectName = projects[selectedProject].name">
+          <i class="fas fa-pencil-alt"></i> Edit
+        </button>
+        <button class="dropdown-item" data-toggle="modal" data-target="#deleteProjectModal">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" data-toggle="modal" data-target="#createProjectModal">
+          <i class="fas fa-plus"></i> New Project
+        </button>
+      </div>
+    </div>
+
+    <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editProjectModalLabel">Edit project</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form (ngSubmit)="saveProject()" #projectEditForm="ngForm">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="projectName">Project name</label>
+                <input type="text" class="form-control" name="projectName" id="projectName"
+                       [(ngModel)]="updatedProjectName" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!projectEditForm.form.valid">
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog"
+         aria-labelledby="deleteProjectModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteProjectModalLabel">Delete project</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete the project: {{projects[selectedProject].name}}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger" (click)="deleteProject()">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <button class="btn btn-success center newBtn" data-toggle="modal" data-target="#createProjectModal"
+          *ngIf="projects.length == 0">
+    New Project
+  </button>
+
+  <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog"
+       aria-labelledby="createProjectModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createProjectModalLabel">Create project</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form (ngSubmit)="createProject()" #projectCreateForm="ngForm">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="projectName">Project name</label>
+              <input type="text" class="form-control" name="projectName" id="projectName"
+                     [(ngModel)]="newProjectName" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" [disabled]="!projectCreateForm.form.valid">
+              Create
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="control" *ngIf="selectedProject != null">
+  <button class="btn btn-{{timerStart == null ? 'success' : 'danger'}}" (click)="clockInOut()">
+    Clock{{timerStart == null ? "In" : "Out"}}
+  </button>
+  <div class="duration" *ngIf="duration != null">
+    {{duration}}
+  </div>
+</div>

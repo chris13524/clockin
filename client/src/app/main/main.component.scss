@@ -1,0 +1,25 @@
+.container {
+  max-width: 20rem;
+}
+
+header {
+  margin-top: 5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+footer {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+  text-align: center;
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+}

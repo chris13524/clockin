@@ -1,0 +1,23 @@
+<div>
+  <ng-container *ngIf="!loginSuccess; else loginSuccessTemplate">
+    <form (ngSubmit)="submit()" #homeForm="ngForm">
+      <div class="input-group">
+        <input type="email" class="form-control form-control-lg" placeholder="Enter your email"
+               [(ngModel)]="email" name="email" (keyup)="fixEmail()"
+               pattern="^[a-z0-9._%+-]{1,63}@[a-z0-9.-]{1,63}\.[a-z]{2,63}$"
+               required>
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-success"
+                  [disabled]="!homeForm.form.valid">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+  <ng-template #loginSuccessTemplate>
+    <div class="alert alert-success">
+      Check your email for a login link.
+    </div>
+  </ng-template>
+</div>

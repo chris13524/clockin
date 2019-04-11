@@ -1,0 +1,10 @@
+{
+  "name": "clockin-api",
+  "version": "0.1.0",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mailgun-js": "^0.22.0",
+    "sqlite3": "^4.0.6"
+  }
+}

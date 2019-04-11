@@ -1,0 +1,9 @@
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
+.btn-overflow {
+  @include button-outline-variant(#858b91, #FFFFFF);
+
+  color: #555555;
+  border-color: #ced4da;
+}
