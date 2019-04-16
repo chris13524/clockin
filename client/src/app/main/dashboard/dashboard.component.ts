@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit {
     if (this.timerStart == null) {
       this.timerStart = currentTime();
       const compute = () => {
-        this.duration = this.computeDuration();
+        this.duration = this.durationString(this.timerStart, currentTime());
         this.title.setTitle("ClockIn - " + this.duration);
       };
       this.intervalTimer = setInterval(compute, 1000);
@@ -134,10 +134,8 @@ export class DashboardComponent implements OnInit {
     }
   }
   
-  computeDuration(): string | null {
-    if (this.timerStart == null) return null;
-    
-    let seconds = currentTime() - this.timerStart;
+  durationString(from: number, to: number): string | null {
+    let seconds = to - from;
     let minutes = Math.floor(seconds / 60);
     seconds -= minutes * 60;
     let hours = Math.floor(minutes / 60);
@@ -152,7 +150,14 @@ export class DashboardComponent implements OnInit {
   }
   
   submitTimeEntry(from: number, to: number): void {
-    alert("Duration: " + (to - from));
+    const projectId = this.projects[this.selectedProject].id;
+    this.http.post(environment.api + "/projects/" + projectId + "/time_entries", {
+      from: from,
+      to: to
+    }, {headers: {"Authorization": "Token " + this.token}})
+      .subscribe(() => {
+        alert("Time entry recorded.\nDuration: " + this.durationString(from, to));
+      }, err => alert("Error while submitting time entry."));
   }
 }
 

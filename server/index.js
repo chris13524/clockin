@@ -207,6 +207,37 @@ function main() {
 			res.sendStatus(204);
 		});
 	});
+	
+	app.post("/projects/:id/time_entries", (req, res) => {
+		const userId = req.userId;
+		if (userId == null) {
+			res.sendStatus(401);
+			return;
+		}
+		
+		const projectId = req.params.id;
+		
+		const json = req.body;
+		const from = json.from;
+		const to = json.to;
+		if (from == null || to == null) {
+			res.sendStatus(400);
+			return;
+		}
+		
+		db.get("SELECT * FROM projects WHERE user_id=? AND id=?", [userId, projectId], (err, row) => {
+			if (err) throw err;
+			if (row == null) {
+				res.sendStatus(404);
+				return;
+			}
+
+			db.run("INSERT INTO time_entries VALUES (NULL, ?, ?, ?)", [projectId, from, to], (err) => {
+				if (err) throw err;
+				res.sendStatus(204);
+			});
+		});
+	});
 
 	app.listen(process.env.PORT || 8080);
 }
