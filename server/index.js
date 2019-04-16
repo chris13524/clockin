@@ -85,7 +85,9 @@ function main() {
 						to: email,
 						subject: "Login to ClockIn",
 						text: "Click this link to login to ClockIn: " + link,
-						html: "Click this link to login to ClockIn: <a href=\"" + link + "\">" + link + "</a>"
+						html: HTML_HEADER +
+							"Click this link to login to ClockIn: <a href=\"" + link + "\">" + link + "</a>" +
+							HTML_FOOTER
 					}, err => {
 						if (err == null) {
 							res.sendStatus(204);
@@ -249,3 +251,13 @@ function genToken() {
 function now() {
 	return Math.floor(new Date() / 1000);
 }
+
+const HTML_HEADER = `<!doctype html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>`;
+
+const HTML_FOOTER = `</body>
+</html>`;
